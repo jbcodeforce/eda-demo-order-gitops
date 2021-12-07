@@ -1,0 +1,13 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  creationTimestamp: null
+  name: edademo-dev-app-eda-demo-order-ms-eda-demo-order-ms-binding
+  namespace: edademo-cicd
+spec:
+  params:
+  - name: imageRepo
+    value: quay.io/ibmcase/eda-order-rms
+  - name: tlsVerify
+    value: "true"
+status: {}
