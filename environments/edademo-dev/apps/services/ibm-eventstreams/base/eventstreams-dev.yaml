@@ -36,10 +36,7 @@ spec:
         num.replica.fetchers: 3
         offsets.topic.replication.factor: 3
       listeners:
-        plain:
-          port: 9092
-          type: internal
-          tls: false
+        plain: {}
         external:
           port: 9091
           type: route
