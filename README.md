@@ -97,7 +97,7 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 * Start ArgoCD app of apps
 
 ```sh
-
+ oc apply -k config/argocd
 ```
 
 ## How to develop the 
