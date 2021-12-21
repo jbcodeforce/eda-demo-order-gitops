@@ -74,7 +74,13 @@ with the entitlement key
   ```sh
   ./bootstrap/scripts/installCP4IOperator.sh ibm-eventstreams
   ```
+* Install some of the open source product used for demonstration
 
+  ```sh
+  # Elastic Search
+  oc apply -k bootstrap/elastic-search/
+  ```
+  
 * Create ArgoCD project: 
 
 ```sh
@@ -102,4 +108,5 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 
 ![](./docs/argocd-apps.png)
 
-## How to develop the 
+## How to add more components
+

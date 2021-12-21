@@ -9,7 +9,7 @@ spec:
     accept: true
     use: CloudPakForIntegrationNonProduction
   requestIbmServices:
-    iam: false
+    iam: true
     monitoring: false
   adminApi: {}
   adminUI: {}
