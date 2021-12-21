@@ -38,12 +38,10 @@ spec:
       listeners:
         plain: {}
         external:
-          port: 9091
           type: route
           authentication:
             type: scram-sha-512
         tls:
-          port: 9094
           authentication:
             type: tls
       metrics: {}
