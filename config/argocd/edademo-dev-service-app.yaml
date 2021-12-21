@@ -2,15 +2,17 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   creationTimestamp: null
-  name: edademo-stage-env
+  labels:
+    app.kubernetes.io/name: app-eda-demo-order-ms
+  name: edademo-dev-services-app
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: edademo-stage
+    namespace: edademo-dev
     server: https://kubernetes.default.svc
-  project: default
+  project: edademo
   source:
-    path: environments/edademo-stage/env/overlays
+    path: environments/edademo-dev/apps/services/overlays
     repoURL: https://github.com/jbcodeforce/eda-demo-order-gitops.git
   syncPolicy:
     automated:

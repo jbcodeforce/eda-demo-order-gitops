@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: ibm-eventstreams
+  namespace: openshift-operators
+spec:
+  channel: v2.5
+  name: ibm-eventstreams
+  installPlanApproval: Automatic
+  source: ibm-operator-catalog
+  sourceNamespace: openshift-marketplace
+  startingCSV: ibm-eventstreams.v2.5.0

@@ -29,7 +29,7 @@ spec:
     jsonPointers:
     - /spec/host
     kind: Route
-  project: default
+  project: edademo
   source:
     path: config/edademo-cicd/overlays
     repoURL: https://github.com/jbcodeforce/eda-demo-order-gitops.git

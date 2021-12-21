@@ -8,7 +8,7 @@ spec:
   destination:
     namespace: edademo-dev
     server: https://kubernetes.default.svc
-  project: default
+  project: edademo
   source:
     path: environments/edademo-dev/env/overlays
     repoURL: https://github.com/jbcodeforce/eda-demo-order-gitops.git
