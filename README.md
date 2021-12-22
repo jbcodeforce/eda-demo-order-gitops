@@ -25,7 +25,7 @@ kam bootstrap \
 
 * Added scripts to deploy the gitops, pipelines operators
 * Added a bootstrap folder to define gitops and operator declaration and to create an ArgoCD project
-* Defined a script to install IBM Catalogs 
+* Defined a script to install IBM Catalogs and Cloud Pak for Integration components 
 
 ## How to use it
 
@@ -62,25 +62,38 @@ openshift-gitops-server-7957cc47d9-cmxvw                      1/1     Running   
 with the entitlement key
 
     ```sh
+    KEY=<yourentitlementkey>
     oc create secret docker-registry ibm-entitlement-key \
-        --docker-username=cp \
-        --docker-server=cp.icr.io \
-        --namespace=openshift-gitops \
-        --docker-password=<your_entitlement_key> 
+    --docker-username=cp \
+    --docker-password=$KEY \
+    --docker-server=cp.icr.io \
+    --namespace=openshift-gitops 
     ```
 
 * Install different IBM product operators needed:
 
   ```sh
-  ./bootstrap/scripts/installCP4IOperator.sh ibm-eventstreams
+  # install cp4i namespace + navigator operator
+  oc apply -f bootstrap/ibm-cp4i/cp4i-namespace.yaml
+  oc apply -k bootstrap/ibm-cp4i
+  # install event streams operator
+  oc apply -k bootstrap/ibm-eventstreams
   ```
-* Install some of the open source product used for demonstration
+* Install manually the Cloud Pak for integration navigator.
+
+  ```sh
+  oc apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/eda-gitops-catalog/main/cp4i-operators/platform-navigator/operands/cp4i-sample.yaml
+  ```
+
+  This can take up to 45 minutes, please wait. 
+  
+* Install some of the open source products used for demonstration
 
   ```sh
   # Elastic Search
   oc apply -k bootstrap/elastic-search/
   ```
-  
+
 * Create ArgoCD project: 
 
 ```sh

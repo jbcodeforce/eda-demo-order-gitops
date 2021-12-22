@@ -1,0 +1,118 @@
+﻿apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  annotations:
+    common.k8s.elastic.co/controller-version: 1.9.1
+    elasticsearch.k8s.elastic.co/cluster-uuid: YBOtTbolR1aIObaKRVFyQg
+  creationTimestamp: '2021-12-21T19:56:23Z'
+  generation: 2
+  managedFields:
+    - apiVersion: elasticsearch.k8s.elastic.co/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:version': {}
+          'f:volumeClaimDeletePolicy': {}
+      manager: Mozilla
+      operation: Update
+      time: '2021-12-21T19:56:23Z'
+    - apiVersion: elasticsearch.k8s.elastic.co/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:common.k8s.elastic.co/controller-version': {}
+            'f:elasticsearch.k8s.elastic.co/cluster-uuid': {}
+        'f:spec':
+          'f:auth': {}
+          'f:http':
+            .: {}
+            'f:service':
+              .: {}
+              'f:metadata': {}
+              'f:spec': {}
+            'f:tls':
+              .: {}
+              'f:certificate': {}
+          'f:monitoring':
+            .: {}
+            'f:logs': {}
+            'f:metrics': {}
+          'f:nodeSets': {}
+          'f:transport':
+            .: {}
+            'f:service':
+              .: {}
+              'f:metadata': {}
+              'f:spec': {}
+            'f:tls':
+              .: {}
+              'f:certificate': {}
+          'f:updateStrategy':
+            .: {}
+            'f:changeBudget': {}
+        'f:status':
+          .: {}
+          'f:availableNodes': {}
+          'f:health': {}
+          'f:phase': {}
+          'f:version': {}
+      manager: elastic-operator
+      operation: Update
+      time: '2021-12-21T20:12:06Z'
+  name: eda-elasticsearch
+  namespace: edademo-dev
+  resourceVersion: '1469910'
+  uid: 28fb3762-9c09-4981-b105-9234c1f5e3f1
+spec:
+  auth: {}
+  http:
+    service:
+      metadata: {}
+      spec: {}
+    tls:
+      certificate: {}
+  monitoring:
+    logs: {}
+    metrics: {}
+  nodeSets:
+    - config:
+        node.attr.attr_name: attr_value
+        node.roles:
+          - master
+          - data
+        node.store.allow_mmap: false
+      count: 3
+      name: default
+      podTemplate:
+        metadata:
+          creationTimestamp: null
+          labels:
+            foo: bar
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                limits:
+                  cpu: '2'
+                  memory: 4Gi
+                requests:
+                  cpu: '1'
+                  memory: 4Gi
+  transport:
+    service:
+      metadata: {}
+      spec: {}
+    tls:
+      certificate: {}
+  updateStrategy:
+    changeBudget: {}
+  version: 7.16.1
+  volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
+status:
+  availableNodes: 3
+  health: green
+  phase: Ready
+  version: 7.16.1
