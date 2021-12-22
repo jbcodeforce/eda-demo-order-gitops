@@ -4,7 +4,7 @@ metadata:
   name: eda-demo-order-mgr-cm
 data:
   APP_VERSION: 0.0.2
-  MP_MESSAGING_CONNECTOR_SMALLRYE_KAFKA_BOOTSTRAP_SERVERS: dev-kafka-bootstrap.edademo-dev.svc:9092
+  KAFKA_BOOTSTRAP_SERVERS: dev-kafka-bootstrap.edademo-dev.svc:9092
   KAFKA_TOPIC_NAME: edademo-orders
   ES_APICURIO_URL:  https://dev-ibm-es-ac-reg-external-edademo-dev.cp4i-mq-es-eepm-1e3af63cfd19e855098d645120e18baf-0000.us-south.containers.appdomain.cloud
   

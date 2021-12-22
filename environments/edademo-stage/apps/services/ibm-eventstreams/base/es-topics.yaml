@@ -2,9 +2,9 @@ apiVersion: eventstreams.ibm.com/v1beta1
 kind: KafkaTopic
 metadata:
   name: eda-demo-orders
-  namespace: edademo-dev
+  namespace: edademo-stage
   labels:
-    eventstreams.ibm.com/cluster: dev
+    eventstreams.ibm.com/cluster: stage
 spec:
   partitions: 1
   replicas: 1

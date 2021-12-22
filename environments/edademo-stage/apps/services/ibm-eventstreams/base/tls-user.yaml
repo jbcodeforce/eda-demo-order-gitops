@@ -2,9 +2,9 @@ apiVersion: eventstreams.ibm.com/v1beta1
 kind: KafkaUser
 metadata:
   name: tls-user
-  namespace: edademo-dev
+  namespace: edademo-stage
   labels:
-    eventstreams.ibm.com/cluster: dev
+    eventstreams.ibm.com/cluster: stage
 spec:
   authentication:
     type: tls
