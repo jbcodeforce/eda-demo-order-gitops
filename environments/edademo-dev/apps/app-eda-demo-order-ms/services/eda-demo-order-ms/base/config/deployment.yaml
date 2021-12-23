@@ -44,18 +44,11 @@ spec:
             secretKeyRef:
               key: ca.password
               name: dev-cluster-ca-cert
-        - name: KAFKA_SSL_KEYSTORE_LOCATION
-          value: /deployments/certs/user/user.p12
-        - name: KAFKA_SSL_KEYSTORE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: user.password
-              name: tls-user
         - name: JAAS_CFG
           valueFrom:
             secretKeyRef:
               key: sasl.jaas.config
-              name: scram-user
+              name: registry-user
         envFrom:
         - configMapRef:
             name: eda-demo-order-mgr-cm
@@ -69,16 +62,8 @@ spec:
           name: kafka-cert
           readOnly: false
           subPath: ""
-        - mountPath: /deployments/certs/user
-          name: user-cert
-          readOnly: false
-          subPath: ""
       volumes:
       - name: kafka-cert
         secret:
           optional: false
           secretName: dev-cluster-ca-cert
-      - name: user-cert
-        secret:
-          optional: false
-          secretName: tls-user
