@@ -1,7 +1,7 @@
 # Demo gitops for an event-driven solution
 
 This gitops repository supports [the article about developer's experience](https://jbcodeforce.github.io/blogs/12-27-21/)
-to develop event-driven microservices.
+to develop an event-driven microservice solution.
 
 ## How it was created
 
@@ -9,7 +9,8 @@ We used KAM CLI to create the project with the following parameters:
 
 Get Github access token, to be used in the KAM bootstrap command, in future steps.
 
-    ![](./docs/github-access-tk.png)
+![](./docs/github-access-tk.png)
+
 
 ```sh
 kam bootstrap \
@@ -23,9 +24,11 @@ kam bootstrap \
 
 ## What was added
 
-* Added scripts to deploy the gitops, pipelines operators
+
 * Added a bootstrap folder to define gitops and operator declaration and to create an ArgoCD project
 * Defined a script to install IBM Catalogs and Cloud Pak for Integration components 
+* Added scripts to deploy the gitops, pipelines operators: `scripts/installOperators.sh`
+* Add deployment for the producer app in `environments/eda-demo-dev/app-eda-demo-order-ms`
 
 ## How to use it
 
@@ -36,6 +39,7 @@ kam bootstrap \
     cd bootstrap/scripts/
     ./installOperators.sh
     ```
+    
 Once the operators are running the command: `oc get pods -n openshift-gitops` should return
 a list of pods like:
 
@@ -70,24 +74,28 @@ with the entitlement key
     --namespace=openshift-gitops 
     ```
 
-* Install different IBM product operators needed:
+* Install the different IBM product operators as needed:
 
-  ```sh
-  # install cp4i namespace + navigator operator
-  oc apply -f bootstrap/ibm-cp4i/cp4i-namespace.yaml
-  oc apply -k bootstrap/ibm-cp4i
-  # install event streams operator
-  oc apply -k bootstrap/ibm-eventstreams
-  ```
-* Install manually the Cloud Pak for integration navigator.
+    ```sh
+    # install cp4i namespace + navigator operator
+    oc apply -f bootstrap/ibm-cp4i/cp4i-namespace.yaml
+    oc apply -k bootstrap/ibm-cp4i
+    # install event streams operator
+    oc apply -k bootstrap/ibm-eventstreams
+    # Copy the entitlement key in cp4i ns
+    oc project cp4i
+    ./bootstrap/scripts/copySecrets.sh ibm-entitlement-key openshift-gitops cp4i
+    ```
 
-  ```sh
-  oc apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/eda-gitops-catalog/main/cp4i-operators/platform-navigator/operands/cp4i-sample.yaml
-  ```
+* Install manually the Cloud Pak for integration navigator operand.
 
-  This can take up to 45 minutes, please wait. 
+    ```sh
+    oc apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/eda-gitops-catalog/main/cp4i-operators/platform-navigator/operands/cp4i-sample.yaml
+    ```
+
+  This can take up to 45 minutes to install, please wait. 
   
-* Install some of the open source products used for demonstration
+* Install some of the open source products used in this demonstration
 
   ```sh
   # Elastic Search
@@ -113,13 +121,20 @@ oc get route openshift-gitops-server -o jsonpath='{.status.ingress[].host}'
 oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 ```
 
-* Start ArgoCD app of apps
+* Start ArgoCD app of apps, to create instances of Event Streams, and the different services.
 
 ```sh
  oc apply -k config/argocd
 ```
 
+The image below list the first Argoo apps:
+
 ![](./docs/argocd-apps.png)
+
+* `edademo-dev-env` is for the namespace and service account user.
+* `edademo-dev-services-app` is for creating an IBM event streams cluster named `dev` under the `edademo-dev` namespace, 
+for configuring the Kafka topics, and scram and tls users.
+
 
 ## How to add more components
 
