@@ -44,11 +44,11 @@ spec:
             secretKeyRef:
               key: ca.password
               name: dev-cluster-ca-cert
-        - name: JAAS_CFG
-          valueFrom:
-            secretKeyRef:
-              key: sasl.jaas.config
-              name: registry-user
+        # - name: JAAS_CFG
+        #  valueFrom:
+        #    secretKeyRef:
+        #      key: sasl.jaas.config
+        #      name: registry-user
         envFrom:
         - configMapRef:
             name: eda-demo-order-mgr-cm
