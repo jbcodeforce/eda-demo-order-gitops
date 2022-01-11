@@ -29,6 +29,8 @@ spec:
         - java
         image: quay.io/ibmcase/eda-demo-order-ms
         imagePullPolicy: Always
+        #imagePullSecrets:
+        #- name: jbcodeforce-pull-secret
         # imagePullPolicy: IfNotPresent
         env:
         - name: KUBERNETES_NAMESPACE
