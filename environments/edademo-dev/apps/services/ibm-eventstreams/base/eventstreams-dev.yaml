@@ -16,6 +16,8 @@ spec:
   apicurioRegistry: {}
   collector: {}
   restProducer: {}
+  security:
+    internalTls: TLSv1.2
   strimziOverrides:
     entityOperator: 
       topicOperator: {}
