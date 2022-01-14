@@ -137,7 +137,13 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
  oc apply -k config/argocd
 ```
 
-The image below list the first ArgoCD apps:
+* Be sure to have the ibm-entitlement-key secret in the `edademo-dev` project
+
+```sh
+./bootstrap/scripts/copySecrets.sh ibm-entitlement-key cp4i edademo-dev
+```
+
+* The image below list the first ArgoCD apps:
 
 ![](./docs/argocd-apps.png)
 
@@ -146,9 +152,48 @@ The image below list the first ArgoCD apps:
 for configuring the Kafka topics, and scram and tls users.
 * `edademo-dev-app-eda-demo-order-ms` is the order service producer argo app.
 
-It may take some time to get Event streams started.
+It may take 1 to minutes to get Event streams started.
 
-See the demonstration script to access to the Swagger API and to verify schema and events generated. 
+See the [demonstration-steps](#demonstration-steps) to access to the Swagger API and to verify schema and events generated. 
 
 ## How to add more components
 
+
+## Demonstration Steps
+
+* Open a browser to the Swagger UI using the route of the producer app:
+
+```sh
+chrome http://$(oc get route eda-demo-order-ms -o jsonpath='{.spec.host}')/q/swagger-ui/
+```
+
+* Use the POST operation at the `` url with the following payload
+
+* Send one order via the POST orders end point `api/v1/orders`:
+
+```sh
+ {  "customerID": "C01",
+    "productID": "P02",
+    "quantity": 15,
+    "destinationAddress": {
+      "street": "12 main street",
+      "city": "san francisco",
+      "country": "USA",
+      "state": "CA",
+      "zipcode": "92000"
+    }
+}
+```
+
+* Verify the schema is uploaded to the schema registy
+* Verify the message is in the order topic using the Event Streams User Interface
+
+```sh
+chrome http://$(oc get route dev-ibm-es-ui -o jsonpath='{.spec.host}')
+```
+
+Use the `admin` user and to get his password use
+
+```sh
+oc get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' -n ibm-common-services | base64 --decode && echo ""
+```
