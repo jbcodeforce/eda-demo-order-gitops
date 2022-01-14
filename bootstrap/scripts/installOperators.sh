@@ -13,7 +13,7 @@ install_operator() {
         oc apply -k $scriptDir/../gitops-operator 
         ;;
     "openshift-pipelines-operator")
-        oc apply -k ../pipeline-operator 
+        oc apply -k $scriptDir/../pipeline-operator 
         ;;
     *)
         echo operator not supported

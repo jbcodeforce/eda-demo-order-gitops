@@ -29,11 +29,15 @@ kam bootstrap \
 * Defined a script to install IBM Catalogs and Cloud Pak for Integration components 
 * Added scripts to deploy the gitops, pipelines operators: `scripts/installOperators.sh`
 * Add deployment for the producer app in `environments/eda-demo-dev/app-eda-demo-order-ms`
+* Added a lot of kustomize files for the different operators needed for the solution under the bootstrap folder: apicurio, elastic-search, sealed-secret...
 
 ## How to use it
 
-* Login to the OpenShift Console
-* Use the script to install GitOps and Pipeline operators: 
+* Login to the OpenShift Console, and get login token to be able to use `oc cli`
+
+### Bootstrap GitOps
+
+* If not done already, use the script to install GitOps and Pipeline operators: 
 
     ```sh
     cd bootstrap/scripts/
@@ -69,9 +73,9 @@ with the entitlement key
     KEY=<yourentitlementkey>
     oc create secret docker-registry ibm-entitlement-key \
     --docker-username=cp \
-    --docker-password=$KEY \
     --docker-server=cp.icr.io \
-    --namespace=openshift-gitops 
+    --namespace=cp4i \
+    --docker-password=$KEY 
     ```
 
 * Install the different IBM product operators as needed:
@@ -82,27 +86,13 @@ with the entitlement key
     oc apply -k bootstrap/ibm-cp4i
     # install event streams operator
     oc apply -k bootstrap/ibm-eventstreams
-    # Copy the entitlement key in cp4i ns
-    oc project cp4i
-    ./bootstrap/scripts/copySecrets.sh ibm-entitlement-key openshift-gitops cp4i
+    # install apicurio operator
+     oc apply -k bootstrap/apicurio
+    # install sealed secrets operator and controller under sealed-secret namespace
+    oc apply -k bootstrap/sealed-secret 
     ```
 
-* Install manually the Cloud Pak for integration navigator operand.
-
-    ```sh
-    oc apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/eda-gitops-catalog/main/cp4i-operators/platform-navigator/operands/cp4i-sample.yaml
-    ```
-
-  This can take up to 45 minutes to install, please wait. 
-  
-* Install some of the open source products used in this demonstration
-
-  ```sh
-  # Elastic Search
-  oc apply -k bootstrap/elastic-search/
-  ```
-
-* Create ArgoCD project: 
+* Create ArgoCD project named `edademo`: 
 
 ```sh
 oc project openshift-gitops
@@ -114,6 +104,26 @@ oc apply -k bootstrap/argocd-project
 ```sh
 oc get route openshift-gitops-server -o jsonpath='{.status.ingress[].host}'
 ```
+
+* [Optional] Install any open source product operators used in this demonstration:
+
+  ```sh
+  # Elastic Search
+  oc apply -k bootstrap/elastic-search/
+  # Microcks to do API testing
+  oc apply -k bootstrap/microcks-operator/operator/overlays/stable
+  ```
+
+### Deploy solution
+
+* [Optional] Install manually the Cloud Pak for integration navigator operand.
+
+    ```sh
+    oc apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/eda-gitops-catalog/main/cp4i-operators/platform-navigator/operands/cp4i-sample.yaml
+    ```
+
+  This can take up to 45 minutes to install, please wait. 
+  
 
 * Get the argocd admin password:
 
@@ -127,14 +137,18 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
  oc apply -k config/argocd
 ```
 
-The image below list the first Argoo apps:
+The image below list the first ArgoCD apps:
 
 ![](./docs/argocd-apps.png)
 
 * `edademo-dev-env` is for the namespace and service account user.
 * `edademo-dev-services-app` is for creating an IBM event streams cluster named `dev` under the `edademo-dev` namespace, 
 for configuring the Kafka topics, and scram and tls users.
+* `edademo-dev-app-eda-demo-order-ms` is the order service producer argo app.
 
+It may take some time to get Event streams started.
+
+See the demonstration script to access to the Swagger API and to verify schema and events generated. 
 
 ## How to add more components
 
