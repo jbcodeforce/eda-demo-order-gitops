@@ -35,6 +35,10 @@ kam bootstrap \
 
 * Login to the OpenShift Console, and get login token to be able to use `oc cli`
 
+If you want to do a pure GitOps approach see next sections, if you want to do 
+deployment manually without ArgoCD, to test or understand the step by step process,
+go to [section](#manual-deployment)
+
 ### Bootstrap GitOps
 
 * If not done already, use the script to install GitOps and Pipeline operators: 
@@ -78,7 +82,7 @@ with the entitlement key
     --docker-password=$KEY 
     ```
 
-* Install the different IBM product operators as needed:
+* Install the different IBM product and open source operators as needed:
 
     ```sh
     # install cp4i namespace + navigator operator
@@ -154,10 +158,45 @@ for configuring the Kafka topics, and scram and tls users.
 
 It may take 1 to minutes to get Event streams started.
 
+* At this stage the application will not run successfully as the Apicurio URL in the configmap 
+(`environments/edademo-dev/apps/app-eda-demo-order-ms/services/eda-demo-order-ms/base/config/configmap.yaml`) is not
+right as it depends on the external route and name of the cluster. So you need to update 
+the configMap with your Apicurio URL.
+
+```yaml
+ES_APICURIO_URL: http://eda-registry.edademo-dev.router-default.cp4a-21-3-1e3af63cfd19e855098d645120e18baf-0000.us-south.containers.appdomain.cloud/apis/registry/v2
+```
+
+Once done, push the update to the git repo and then ArgoCD will redeploy the configmap. 
+The `eda-demo-order-ms` pod needs to be restarted.
+
 See the [demonstration-steps](#demonstration-steps) to access to the Swagger API and to verify schema and events generated. 
 
 ## How to add more components
 
+### Adding an app
+
+### Adding Kafka connect
+
+As an example we want to add Kafka Connect as a service. So add the descriptor in
+the `environment/edademo-dev/apps/services` folder.
+
+* create a kconnect folder and add the connector definition
+* Define the secret for the COS credential reusing the template: `seecrets/cos-credentials-templ.yaml`
+* [Optional] Use the seal secret to transform the secret so it can be uploaded to Git repository. You need
+SealedSecret operator installed.
+   
+  ```sh
+  ./sealSecret.sh cos-credentials
+  # this should create a file cos-credentials.sealedsecret.yaml
+  ```
+
+  The `cos-credentials.sealedsecret.yaml` file can be moved to kconnect folder.
+
+* Define the sink connector properties
+
+```
+```
 
 ## Demonstration Steps
 
@@ -168,6 +207,8 @@ chrome http://$(oc get route eda-demo-order-ms -o jsonpath='{.spec.host}')/q/swa
 ```
 
 * Use the POST operation at the `` url with the following payload
+
+  ![](./docs/POST-order.png)
 
 * Send one order via the POST orders end point `api/v1/orders`:
 
@@ -186,7 +227,10 @@ chrome http://$(oc get route eda-demo-order-ms -o jsonpath='{.spec.host}')/q/swa
 ```
 
 * Verify the schema is uploaded to the schema registy
-* Verify the message is in the order topic using the Event Streams User Interface
+
+  ![](./docs/apicurio-schema.png)
+
+* Verify the message is in the `orders` topic using the Event Streams User Interface
 
 ```sh
 chrome http://$(oc get route dev-ibm-es-ui -o jsonpath='{.spec.host}')
@@ -197,3 +241,17 @@ Use the `admin` user and to get his password use
 ```sh
 oc get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' -n ibm-common-services | base64 --decode && echo ""
 ```
+
+  ![](./docs/order-event.png)
+
+## Manual deployment
+
+!!! Under construction
+
+The goal of this section is to present a step by step deployment approach without ArgoCD but
+still leveraging existing yaml files.
+
+* login to OpenShift cluster
+* install operators needed if not present already:
+
+    * Event Streams: `oc apply -k`

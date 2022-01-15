@@ -1,0 +1,74 @@
+apiVersion: eventstreams.ibm.com/v1beta1
+kind: KafkaConnect
+metadata:
+  name: eda-kconnect-cluster
+  annotations:
+    eventstreams.ibm.com/use-connector-resources: "true"
+spec:
+  version: 2.8.0
+  replicas: 1
+  bootstrapServers: dev-kafka-bootstrap.edademo-dev.svc:9092
+  image: quay.io/ibmcase/eda-kconnect-cluster-image:latest
+  template:
+    pod:
+      imagePullSecrets: []
+      metadata:
+        annotations:
+          eventstreams.production.type: CloudPakForIntegrationNonProduction
+          productVersion: 10.5.0
+          productMetric: VIRTUAL_PROCESSOR_CORE
+          productChargedContainers: eda-kconnect-cluster-connect
+          cloudpakName: IBM Cloud Pak for Integration
+          productID: 2a79e49111f44ec3acd89608e56138f5
+          cloudpakId: c8b82d189e7545f0892db9ef2731b90d
+          productName: IBM Event Streams for Non Production
+          cloudpakVersion: 2021.4.1
+          productCloudpakRatio: "2:1"
+  config:
+    config.providers: env 
+    config.providers.env.class: io.strimzi.kafka.EnvVarConfigProvider
+    group.id: connect-cluster
+    offset.storage.topic: connect-cluster-offsets
+    config.storage.topic: connect-cluster-configs
+    status.storage.topic: connect-cluster-status
+    config.storage.replication.factor: 1
+    offset.storage.replication.factor: 1
+    status.storage.replication.factor: 1
+  externalConfiguration:
+    env:
+      - name: IBM_COS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cos-creds
+            key: cos.api.key
+      - name: IBM_COS_BUCKET_LOCATION
+        valueFrom:
+          secretKeyRef:
+            name: cos-creds
+            key: cos.bucket.location
+      - name: IBM_COS_BUCKET_NAME
+        valueFrom:
+          secretKeyRef:
+            name: cos-creds
+            key: cos.bucket.name
+      - name: IBM_COS_RESILIENCY
+        valueFrom:
+          secretKeyRef:
+            name: cos-creds
+            key: cos.bucket.resiliency
+      - name: IBM_COS_CRM
+        valueFrom:
+          secretKeyRef:
+            name: cos-creds
+            key: cos.service.crn
+
+#  tls:
+#    trustedCertificates:
+#      - secretName: quickstart-cluster-ca-cert
+#        certificate: ca.crt
+#  authentication:
+#    type: scram-sha-512
+#    username: my-connect-user
+#    passwordSecret:
+#      secretName: my-connect-user
+#      password: my-connect-password-key

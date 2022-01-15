@@ -1,0 +1,4 @@
+resources: 
+  - ./kafka-connect.yaml
+  - ./cos-credentials-sealedsecret.yaml
+  - ./kafka-cos-sink-connector.yaml
