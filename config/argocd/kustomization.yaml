@@ -1,6 +1,5 @@
 resources:
 - argo-app.yaml
-# - cicd-app.yaml
 - edademo-dev-env-app.yaml
 - edademo-dev-service-app.yaml
 - edademo-dev-app-eda-demo-order-ms-app.yaml

@@ -1,4 +1,4 @@
 resources:
 - argocd-admin.yaml
 - edademo-dev-environment.yaml
-- edademo-dev-rolebinding.yaml
+
