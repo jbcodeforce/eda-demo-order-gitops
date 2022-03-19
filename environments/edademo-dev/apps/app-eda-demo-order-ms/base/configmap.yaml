@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: eda-demo-order-mgr-cm
 data:
-  KAFKA_BOOTSTRAP_SERVERS: dev-kafka-bootstrap.edademo-dev.svc:9092
-  KAFKA_TOPIC_NAME: eda-demo-orders
-  KAFKA_SECURITY_PROTOCOL: PLAINTEXT
+  KAFKA_BOOTSTRAP_SERVERS: es-demo-kafka-bootstrap.cp4i-eventstreams:9093
+  KAFKA_TOPIC_NAME: eda-demo.orders
+  KAFKA_SECURITY_PROTOCOL: SSL
   ES_APICURIO_URL: http://eda-registry.edademo-dev.router-default.cp4a-21-3-1e3af63cfd19e855098d645120e18baf-0000.us-south.containers.appdomain.cloud/apis/registry/v2
   # http://eda-registry-service.edademo-dev.svc/apis/registry/v2
   # https://dev-ibm-es-ac-reg-external-edademo-dev.cp4i-es-mq-1e3af63cfd19e855098d645120e18baf-0000.us-south.containers.appdomain.cloud

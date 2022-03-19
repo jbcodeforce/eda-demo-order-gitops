@@ -24,7 +24,6 @@ kam bootstrap \
 
 ## What was added
 
-
 * Added a bootstrap folder to define gitops and operator declaration and to create an ArgoCD project
 * Defined a script to install IBM Catalogs and Cloud Pak for Integration components 
 * Added scripts to deploy the gitops, pipelines operators: `scripts/installOperators.sh`
@@ -35,8 +34,8 @@ kam bootstrap \
 
 * Login to the OpenShift Console, and get login token to be able to use `oc cli`
 
-If you want to do a pure GitOps approach see next sections, if you want to do 
-deployment manually without ArgoCD, to test or understand the step by step process,
+If you want to do a pure GitOps approach see next sections, if you want to do a manual
+deployment without ArgoCD, to test or understand the step by step process,
 go to [section](#manual-deployment)
 
 ### Bootstrap GitOps
@@ -63,14 +62,14 @@ openshift-gitops-repo-server-6dc777c845-gdjhr                 1/1     Running   
 openshift-gitops-server-7957cc47d9-cmxvw                      1/1     Running   0          4h5m
 ```
 
-* Install IBM product catalog
+* If not done already, install IBM product catalog
 
   ```sh
   ./bootstrap/scripts/installIBMCatalog.sh
   ```
 
 * Obtain your [IBM license entitlement key](https://github.com/IBM/cloudpak-gitops/blob/main/docs/install.md#obtain-an-entitlement-key)
-* Update the [OCP global pull secret of the `openshift-gitops` project](https://github.com/IBM/cloudpak-gitops/blob/main/docs/install.md#update-the-ocp-global-pull-secret)
+* Update the [OCP global pull secret of the `openshift-operators` project](https://github.com/IBM/cloudpak-gitops/blob/main/docs/install.md#update-the-ocp-global-pull-secret)
 with the entitlement key
 
     ```sh
@@ -78,7 +77,7 @@ with the entitlement key
     oc create secret docker-registry ibm-entitlement-key \
     --docker-username=cp \
     --docker-server=cp.icr.io \
-    --namespace=cp4i \
+    --namespace=openshift-operators \
     --docker-password=$KEY 
     ```
 
@@ -103,10 +102,10 @@ oc project openshift-gitops
 oc apply -k bootstrap/argocd-project
 ```
 
-* Get the ArgoCD User Interface URL
+* Get the ArgoCD User Interface URL and open a web browser
 
 ```sh
-oc get route openshift-gitops-server -o jsonpath='{.status.ingress[].host}'
+chrome https://$(oc get route openshift-gitops-server -o jsonpath='{.status.ingress[].host}'  -n openshift-gitops)
 ```
 
 * [Optional] Install any open source product operators used in this demonstration:

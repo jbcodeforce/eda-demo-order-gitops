@@ -1,0 +1,13 @@
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry
+metadata:
+  name: eda-registry
+spec:
+  configuration:
+    persistence: kafkasql
+    kafkasql:
+      bootstrapServers: es-demo-kafka-bootstrap.cp4i-eventstreams.svc:9093
+      security:
+        tls:
+          keystoreSecretName: es-tls-user
+          truststoreSecretName: es-demo-cluster-ca-cert
