@@ -7,8 +7,8 @@ metadata:
 spec:
   version: 2.8.1
   replicas: 1
-  bootstrapServers: dev-kafka-bootstrap.rt-inventory-dev.svc:9092
-  image: quay.io/ibmcase/eda-kconnect-cluster-image:latest
+  bootstrapServers: es-demo-kafka-bootstrap.cp4i-eventstreams.svc:9093
+  image: quay.io/ibmcase/eda-kconnect-cluster-image:0.0.1
   template:
     pod:
       imagePullSecrets: []
@@ -32,13 +32,13 @@ spec:
     config.storage.replication.factor: 3
     offset.storage.replication.factor: 3
     status.storage.replication.factor: 3
-#  tls:
-#    trustedCertificates:
-#      - secretName: quickstart-cluster-ca-cert
-#        certificate: ca.crt
-#  authentication:
-#    type: scram-sha-512
-#    username: my-connect-user
-#    passwordSecret:
-#      secretName: my-connect-user
-#      password: my-connect-password-key
+  tls:
+    trustedCertificates:
+      - secretName: es-demo-cluster-ca-cert
+        certificate: ca.crt
+  authentication:
+    type: tls
+    certificateAndKey:
+      certificate: user.crt
+      key: user.key
+      secretName: es-tls-user

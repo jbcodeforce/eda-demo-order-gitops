@@ -40,9 +40,13 @@
 
 ### Event Streams Operator and Cluster definitions
 
+* OpenShift Operator Hub, IBM catalog definition
+* Operator subscription
+* Present a yaml file for ES cluster and the capabilities like topic, and user resources.
+
 ### Deployed Order Microservice APP 
 
-Using microprofile reactive messaging to generate events
+Using microprofile reactive messaging to generate events. Explain producer parameters
 
 ### Orders topic, access control, TLS user
 
