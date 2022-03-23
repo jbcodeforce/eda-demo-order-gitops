@@ -1,0 +1,16 @@
+apiVersion: eventstreams.ibm.com/v1alpha1
+kind: KafkaRebalance
+metadata:
+  name: cruisecontrol-es
+  namespace: cp4i-eventstreams
+  labels:
+    eventstreams.ibm.com/cluster: es-demo
+spec:
+  goals:
+    - RackAwareGoal
+    - MinTopicLeadersPerBrokerGoal
+    - ReplicaCapacityGoal
+    - DiskCapacityGoal
+    - NetworkInboundCapacityGoal
+    - NetworkOutboundCapacityGoal
+    - CpuCapacityGoal

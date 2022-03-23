@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: kibana
+  namespace: eda-order-demo
+spec:
+  host: ""
+  port:
+    targetPort: https
+  to:
+    kind: Service
+    name: kibana-kb-http

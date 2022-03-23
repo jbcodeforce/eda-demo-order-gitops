@@ -9,8 +9,8 @@ spec:
     accept: true
     use: CloudPakForIntegrationNonProduction
   requestIbmServices:
-    iam: true
-    monitoring: true
+    iam: false
+    monitoring: false
   adminApi: {}
   adminUI: {}
   apicurioRegistry: {}

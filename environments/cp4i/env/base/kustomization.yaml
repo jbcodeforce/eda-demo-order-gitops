@@ -1,6 +1,5 @@
 resources:
-- argocd-admin.yaml
+- cp4i-environment.yaml
 - service-account.yaml
-- edademo-dev-environment.yaml
 - cp-secret.yaml
 

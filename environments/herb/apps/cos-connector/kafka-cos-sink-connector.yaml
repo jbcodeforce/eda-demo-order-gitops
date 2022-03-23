@@ -11,11 +11,10 @@ spec:
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
     topics: eda-demo.orders
-    cos.api.key: IBM_COS_API_KEY
-    cos.bucket.location: IBM_COS_BUCKET_LOCATION
-    cos.bucket.name: IBM_COS_BUCKET_NAME
-    cos.bucket.resiliency: IBM_COS_RESILIENCY
-    cos.service.crn: "IBM_COS_CRM"
+    cos.api.key: ${env:IBM_COS_API_KEY}
+    cos.bucket.location: ${env:IBM_COS_BUCKET_LOCATION}
+    cos.bucket.name: ${env:IBM_COS_BUCKET_NAME}
+    cos.service.crn: ${env:IBM_COS_CRM}
     cos.object.records: 5
     # As try to have exactly one delivery: cos.object.deadline.seconds: 5
     cos.object.interval.seconds: 5

@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  namespace: ibm-common-services
+  name: ibm-licensing-operator
+spec:
+  channel: v3
+  installPlanApproval: Automatic
+  name: ibm-licensing-operator-app
+  source: ibm-operator-catalog
+  sourceNamespace: openshift-marketplace

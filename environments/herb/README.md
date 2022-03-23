@@ -34,7 +34,14 @@
     oc apply -k ./environments/herb/apps/eda-demo-order-ms
     ```
 
-* Upload the OrderEvent to the schema registry
+* Deploy Elastic Search to eda-order-demo
+
+    ```sh
+    # operator
+    oc apply -k bootstrap/elastic-search
+    # operand
+    oc apply -k environments/herb/services/elastic-search/overlays
+    ```
 
 ## Demonstrate Pub/Sub with order use cases
 

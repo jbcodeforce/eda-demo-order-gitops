@@ -3,22 +3,15 @@
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 install_operator() {
-### function will create an operator subscription to the openshift-operators
-###          namespace for CR use in all namespaces
-### parameters:
-### $1 - operator name
-    echo "#### Install Operator"
-    case $1 in
-    "openshift-gitops-operator")
-        oc apply -k $scriptDir/../gitops-operator 
-        ;;
-    "openshift-pipelines-operator")
-        oc apply -k $scriptDir/../pipeline-operator 
-        ;;
-    *)
-        echo operator not supported
-        exit
-    esac
+PRODUCT=$1
+alreadyDefined=$(oc get -n openshift-operators subscription $PRODUCT 2> /dev/null)
+if [[ -z "$alreadyDefined" ]]
+then
+    oc apply -k $scriptDir/../$PRODUCT
+    wait_operator $PRODUCT
+else
+   echo "$PRODUCT already installed"
+fi
 }
 
 wait_operator() {
@@ -41,21 +34,5 @@ else
 fi
 }
 
-
-# Assess if gitops presents
-alreadyDefined=$(oc get -n openshift-operators subscription openshift-gitops-operator | grep NotFound)
-if [[ -z "$alreadyDefined" ]]
-then
-    install_operator openshift-gitops-operator
-    wait_operator openshift-gitops-operator
-fi
-
-# Assess if pipeline presents
-alreadyDefined=$(oc get -n openshift-operators subscription openshift-pipelines-operator | grep NotFound)
-if [[ -z "$alreadyDefined" ]]
-then
-    install_operator openshift-pipelines-operator
-    wait_operator openshift-pipelines-operator
-fi
 
 

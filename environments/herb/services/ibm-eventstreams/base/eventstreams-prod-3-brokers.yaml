@@ -13,6 +13,7 @@ spec:
   apicurioRegistry: {}
   collector: {}
   restProducer: {}
+  cruise-control: {}
   strimziOverrides:
     kafka:
       replicas: 5

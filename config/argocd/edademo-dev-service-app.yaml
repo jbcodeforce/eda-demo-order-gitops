@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: edademo
   source:
-    path: environments/edademo-dev/apps/services/overlays
+    path: environments/edademo-dev/services/overlays
     repoURL: https://github.com/jbcodeforce/eda-demo-order-gitops.git
   syncPolicy:
     automated:

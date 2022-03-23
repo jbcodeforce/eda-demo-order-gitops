@@ -9,7 +9,7 @@ We used KAM CLI to create the project with the following parameters:
 
 Get Github access token, to be used in the KAM bootstrap command, in future steps.
 
-![](./docs/github-access-tk.png)
+![](./docs/images/github-access-tk.png)
 
 
 ```sh
@@ -43,8 +43,7 @@ go to [section](#manual-deployment)
 * If not done already, use the script to install GitOps and Pipeline operators: 
 
     ```sh
-    cd bootstrap/scripts/
-    ./installOperators.sh
+    cd ./bootstrap/scripts/installGitOpsOperators.sh
     ```
     
 Once the operators are running the command: `oc get pods -n openshift-gitops` should return
@@ -148,7 +147,7 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 
 * The image below list the first ArgoCD apps:
 
-![](./docs/argocd-apps.png)
+![](./docs/images/argocd-apps.png)
 
 * `edademo-dev-env` is for the namespace and service account user.
 * `edademo-dev-services-app` is for creating an IBM event streams cluster named `dev` under the `edademo-dev` namespace, 
@@ -178,19 +177,20 @@ See the [demonstration-steps](#demonstration-steps) to access to the Swagger API
 ### Adding Kafka connect
 
 As an example we want to add Kafka Connect as a service. So add the descriptor in
-the `environment/edademo-dev/apps/services` folder.
+the `environment/edademo-dev/services` folder.
 
 * create a kconnect folder and add the connector definition
-* Define the secret for the COS credential reusing the template: `seecrets/cos-credentials-templ.yaml`
+* Define the secret for the COS credential reusing the template: `secrets/cos-credentials-templ.yaml`
 * [Optional] Use the seal secret to transform the secret so it can be uploaded to Git repository. You need
 SealedSecret operator installed.
    
   ```sh
+  # under secrets
   ./sealSecret.sh cos-credentials
   # this should create a file cos-credentials.sealedsecret.yaml
   ```
 
-  The `cos-credentials.sealedsecret.yaml` file can be moved to kconnect folder.
+  The `cos-credentials.sealedsecret.yaml` file can be moved to kconnect folder and rename the namespace from default to edademo-dev.
 
 * Define the sink connector properties
 
@@ -207,7 +207,7 @@ chrome http://$(oc get route eda-demo-order-ms -o jsonpath='{.spec.host}')/q/swa
 
 * Use the POST operation at the `` url with the following payload
 
-  ![](./docs/POST-order.png)
+  ![](./docs/images/POST-order.png)
 
 * Send one order via the POST orders end point `api/v1/orders`:
 
@@ -227,7 +227,7 @@ chrome http://$(oc get route eda-demo-order-ms -o jsonpath='{.spec.host}')/q/swa
 
 * Verify the schema is uploaded to the schema registy
 
-  ![](./docs/apicurio-schema.png)
+  ![](./docs/images/apicurio-schema.png)
 
 * Verify the message is in the `orders` topic using the Event Streams User Interface
 
@@ -241,7 +241,7 @@ Use the `admin` user and to get his password use
 oc get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' -n ibm-common-services | base64 --decode && echo ""
 ```
 
-  ![](./docs/order-event.png)
+  ![](./docs/images/order-event.png)
 
 ## Manual deployment
 
@@ -251,6 +251,44 @@ The goal of this section is to present a step by step deployment approach withou
 still leveraging existing yaml files.
 
 * login to OpenShift cluster
-* install operators needed if not present already:
+* Install GitOps operators if not already present:
 
-    * Event Streams: `oc apply -k`
+  ```sh
+  ./bootstrap/scripts/installGitOpsOperators.sh
+  ```
+
+* Define IBM Catalog
+
+  ```sh
+  ./bootstrap/scripts/installIBMCatalog.sh 
+  ```
+* Define Entitlement key
+
+  ```sh
+  ./bootstrap/scripts/defineEntitlementSecret.sh $(getEntitlementkey)
+  ```
+
+* Create project:
+
+  ```sh
+  oc apply -k environments/edademo-dev/env/overlays 
+  ```
+
+* Deploy IBM operators Event Streams and MQ:
+
+  ```sh
+  oc apply -k environments/edademo-dev/env/overlays 
+  ```
+* Deploy Sealed secret
+
+  ```sh
+   oc apply -k bootstrap/sealed-secret
+   ```
+
+* Once operators are succeeded, deploy the Services
+
+  ```sh
+  oc apply -k environments/edademo-dev/services/overlays 
+  ```
+
+

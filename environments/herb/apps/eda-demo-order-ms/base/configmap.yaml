@@ -6,6 +6,8 @@ data:
   KAFKA_BOOTSTRAP_SERVERS: es-demo-kafka-bootstrap.cp4i-eventstreams:9093
   KAFKA_TOPIC_NAME: eda-demo.orders
   ES_APICURIO_URL: http://eda-registry.eda-order-demo.router-default.jgrocp48cp4i20214-dcd557ed086a97d77c2297a53c025612-0000.sjc04.containers.appdomain.cloud/apis/registry/v2
+  MP_MESSAGING_CONNECTOR_SMALLRYE_KAFKA_APICURIO_REGISTRY_KAFKA_SECURITY_PROTOCOL: PLAINTEXT
+  JAAS_CFG: ""
   # http://eda-registry-service.edademo-dev.svc/apis/registry/v2
   # https://dev-ibm-es-ac-reg-external-edademo-dev.cp4i-es-mq-1e3af63cfd19e855098d645120e18baf-0000.us-south.containers.appdomain.cloud
   
