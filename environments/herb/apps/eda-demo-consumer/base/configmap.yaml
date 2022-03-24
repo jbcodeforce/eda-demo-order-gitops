@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eda-demo-order-consumer-cm
+data:
+  KAFKA_BOOTSTRAP_SERVERS: es-demo-kafka-bootstrap.cp4i-eventstreams:9093
+  MP_MESSAGING_INCOMING_ORDER_STREAM_TOPIC: eda-demo.orders
+  MP_MESSAGING_OUTGOING_METRICS_TOPIC: eda-demo.order.metrics
+  MP_MESSAGING_INCOMING_ORDER_STREAM_DEAD_LETTER_QUEUE_TOPIC: eda-demo.order.dlq
+  ES_APICURIO_URL: http://eda-registry.eda-order-demo.router-default.jgrocp48cp4i20214-dcd557ed086a97d77c2297a53c025612-0000.sjc04.containers.appdomain.cloud/apis/registry/v2
+  MP_MESSAGING_CONNECTOR_SMALLRYE_KAFKA_APICURIO_REGISTRY_KAFKA_SECURITY_PROTOCOL: PLAINTEXT
+  # http://eda-registry-service.edademo-dev.svc/apis/registry/v2
+  # https://dev-ibm-es-ac-reg-external-edademo-dev.cp4i-es-mq-1e3af63cfd19e855098d645120e18baf-0000.us-south.containers.appdomain.cloud
+  
+
+  

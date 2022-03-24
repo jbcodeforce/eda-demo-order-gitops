@@ -35,7 +35,11 @@ spec:
           type: route
           authentication:
             type: scram-sha-512
+          tls: true
         tls:
+          port: 9093
+          type: internal
+          tls: true
           authentication:
             type: tls
       logging: 

@@ -1,4 +1,4 @@
 secrets/ibm-entitlement-key.yaml
 secrets/cos-credentials.yaml
-environments/herb/services/kconnect/my-kafka*.yaml
+environments/herb/apps/cos-connector/jb*.yaml
 environments/herb/secrets/cos-credentials.yaml

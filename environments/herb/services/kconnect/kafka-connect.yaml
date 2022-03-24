@@ -13,7 +13,6 @@ spec:
   template:
     pod:
       imagePullSecrets: []
-      imagePullPolicy: Always
       metadata:
         annotations:
           productChargedContainers: eda-kconnect-cluster-connect
@@ -34,6 +33,7 @@ spec:
     config.storage.replication.factor: 3
     offset.storage.replication.factor: 3
     status.storage.replication.factor: 3
+  imagePullPolicy: Always
   externalConfiguration:
     env:
       - name: IBM_COS_API_KEY
@@ -56,7 +56,7 @@ spec:
           secretKeyRef:
             name: cos-creds
             key: cos.bucket.resiliency
-      - name: IBM_COS_CRM
+      - name: IBM_COS_CRN
         valueFrom:
           secretKeyRef:
             name: cos-creds

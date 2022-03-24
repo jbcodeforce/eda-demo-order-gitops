@@ -14,8 +14,9 @@ spec:
     cos.api.key: ${env:IBM_COS_API_KEY}
     cos.bucket.location: ${env:IBM_COS_BUCKET_LOCATION}
     cos.bucket.name: ${env:IBM_COS_BUCKET_NAME}
-    cos.service.crn: ${env:IBM_COS_CRM}
+    cos.service.crn: ${env:IBM_COS_CRN}
     cos.object.records: 5
+    cos.bucket.resiliency: ${env:IBM_COS_RESILIENCY}
     # As try to have exactly one delivery: cos.object.deadline.seconds: 5
     cos.object.interval.seconds: 5
     # The connector uses the following scheme to name Cloud Object Storage objects:
