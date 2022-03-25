@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app.kubernetes.io/name: eda-demo-order-kstream
+  name: eda-demo-order-kstream
+spec:
+  host: ""
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: eda-demo-order-kstream
